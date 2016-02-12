@@ -110,4 +110,17 @@ public abstract class AbsActorSystem implements ActorSystem {
             ((AbsActor) entry.getValue()).stop();
         actors.clear();
     }
+
+    /**
+     * Return the actor associated to a given ActorRef
+     * @param actorref type ActorRef
+     * @return Actor type Actor
+     * @throws NoSuchActorException
+     */
+    public Actor<?> matchTo(ActorRef<?> actorref) throws NoSuchActorException {
+        Actor actor = actors.get(actorref);
+        if (actor == null)
+            throw new NoSuchActorException();
+        return actor;
+    }
 }
