@@ -61,7 +61,16 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
     /**
      * True if terminated by the actor system
      */
-    private volatile boolean terminated;
+    private volatile boolean stopped;
+
+    /**
+     * The constructor of the AbsActor class
+     */
+    AbsActor() {
+        self = null;
+        sender = null;
+        stopped = false;
+    }
 
     /**
      * @param sender
@@ -82,5 +91,5 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
         return this;
     }
 
-    public void stop() { terminated = true; }
+    public void stop() { stopped = true; }
 }
