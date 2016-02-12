@@ -39,6 +39,7 @@ package it.unipd.math.pcd.actors;
 
 import it.unipd.math.pcd.actors.exceptions.NoSuchActorException;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -54,6 +55,13 @@ public abstract class AbsActorSystem implements ActorSystem {
      * Associates every Actor created with an identifier.
      */
     private Map<ActorRef<?>, Actor<?>> actors;
+
+    /**
+     * The constructor creates its data field 'actor' as an HashMap where ActorRef are the keys.
+     */
+    public AbsActorSystem() {
+        actors = new HashMap<>();
+    }
 
     @Override
     public ActorRef<? extends Message> actorOf(Class<? extends Actor> actor, ActorMode mode) {
@@ -80,4 +88,26 @@ public abstract class AbsActorSystem implements ActorSystem {
     }
 
     protected abstract ActorRef createActorReference(ActorMode mode);
+
+    /**
+     *
+     * @param actor The actor to be stopped
+     * Invoke this method on an actor to stop him.
+     */
+    @Override
+    public void stop(ActorRef<?> actor) {
+        ((AbsActor)actors.get(actor)).stop();
+        actors.remove(actor);
+    }
+
+    /**
+     * Invoke this method to stop all actors.
+     * The stop() method above will be invoked on all the actors in the ActorSystem.
+     */
+    @Override
+    public void stop() {
+        for (Map.Entry<ActorRef<?>, Actor<?>> entry : actors.entrySet())
+            ((AbsActor) entry.getValue()).stop();
+        actors.clear();
+    }
 }
