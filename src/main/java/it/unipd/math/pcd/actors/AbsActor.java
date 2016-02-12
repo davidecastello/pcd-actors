@@ -37,6 +37,8 @@
  */
 package it.unipd.math.pcd.actors;
 
+import it.unipd.math.pcd.actors.exceptions.UnsupportedMessageException;
+
 /**
  * Defines common properties of all actors.
  *
@@ -57,6 +59,19 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
     protected ActorRef<T> sender;
 
     /**
+     * True if terminated by the actor system
+     */
+    private volatile boolean terminated;
+
+    /**
+     * @param sender
+     * Set data field 'sender' to the last ActorRef that sent a message to this actor
+     */
+    protected final void setSender(ActorRef<T> sender) {
+        this.sender = sender;
+    }
+
+    /**
      * Sets the self-referece.
      *
      * @param self The reference to itself
@@ -66,4 +81,6 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
         this.self = self;
         return this;
     }
+
+    public void stop() { terminated = true; }
 }
