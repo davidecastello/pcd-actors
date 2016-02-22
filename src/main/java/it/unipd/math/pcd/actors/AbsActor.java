@@ -64,14 +64,14 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
     protected ActorRef<T> sender;
 
     /**
-     * True if terminated by the actor system
+     * True if stopped by the actor system
      */
     private volatile boolean stopped;
 
     /**
      * Queue where all the received telegrams go.
      * In this project specifics, this data structure is called "mail box":
-     * I decided to call it "telegram box" since I called "telegrams" the ones
+     * I decided to call it "TelegramBox" since I called "telegrams" the ones
      * who have the message, in order to be original.
      */
     private BlockingQueue<Telegram<T>> telegrambox;
@@ -93,15 +93,20 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
     }
 
     /**
+     * Method used for testing purpose
+     */
+    public boolean nothingToRead() {return telegrambox.isEmpty();}
+
+    /**
      * @param sender
-     * Set data field 'sender' to the last ActorRef that sent a message to this actor
+     * Set data field "sender" to the last ActorRef that sent a message to this actor
      */
     protected final void setSender(ActorRef<T> sender) {
         this.sender = sender;
     }
 
     /**
-     * Sets the self-referece.
+     * Sets the self-reference.
      *
      * @param self The reference to itself
      * @return The actor.
@@ -156,8 +161,8 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
     private class TelegramBoxManager implements Runnable {
 
         /**
-         * If the actor isn't terminated, the telegrambox manager works fine.
-         * If the actor is terminated, the telegrambox manager must empty the telegrambox before stopping.
+         * If the actor isn't terminated, the TelegramBox manager works fine.
+         * If the actor is terminated, the TelegramBox manager must empty the TelegramBox before stopping.
          */
         @Override
         public void run() {

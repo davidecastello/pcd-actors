@@ -31,6 +31,7 @@ public class MyActorSystem extends AbsActorSystem {
     protected ActorRef createActorReference(ActorMode mode)
     {
         if(mode == ActorMode.LOCAL)
+            // MyActorRef is a class that represents the implementation of local ActorRef
             return new MyActorRef(this);
         else
             throw new IllegalArgumentException();

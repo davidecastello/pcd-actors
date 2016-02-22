@@ -3,7 +3,7 @@ import it.unipd.math.pcd.actors.*;
 import java.util.concurrent.ThreadFactory;
 
 /**
- *
+ * This class represents the implementation of the local ActorRef.
  * Created by Davide Castello on 21/02/16.
  */
 public class MyActorRef<T extends Message> extends AbsActorRef<T> {

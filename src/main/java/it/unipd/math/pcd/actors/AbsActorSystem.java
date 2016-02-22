@@ -105,7 +105,6 @@ public abstract class AbsActorSystem implements ActorSystem {
     public void stop() {
         for (Map.Entry<ActorRef<?>, Actor<?>> entry : actors.entrySet())
             ((AbsActor) entry.getValue()).stop();
-        actors.clear();
     }
 
     /**
