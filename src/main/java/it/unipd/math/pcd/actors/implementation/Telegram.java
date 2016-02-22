@@ -9,6 +9,9 @@ import it.unipd.math.pcd.actors.Message;
 
 public interface Telegram<T extends Message> {
 
+    // Return the message in the telegram
     T getMessage();
+
+    // Return the sender of the message
     ActorRef<T> getSender();
 }

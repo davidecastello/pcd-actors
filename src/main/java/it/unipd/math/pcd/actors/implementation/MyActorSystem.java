@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadFactory;
 
 /**
- * Concrete class of ActorSystem.
+ * Concrete implementation of AbsActorSystem.
  * Created by Davide Castello on 21/02/16.
  */
 
@@ -24,6 +24,7 @@ public class MyActorSystem extends AbsActorSystem {
     }
 
     /**
+     * Method that creates a local ActorRef
      * @param mode type ActorMode
      * @return ActorRef
      */

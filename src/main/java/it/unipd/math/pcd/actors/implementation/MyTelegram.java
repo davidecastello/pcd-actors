@@ -4,7 +4,7 @@ import it.unipd.math.pcd.actors.ActorRef;
 import it.unipd.math.pcd.actors.Message;
 
 /**
- *
+ * Implementation of the Telegram interface.
  * Created by Davide Castello on 21/02/16.
  */
 
@@ -19,7 +19,7 @@ public final class MyTelegram<T extends Message> implements Telegram<T> {
     }
 
     /**
-     * Return the message in the telegram
+     * Return the message in the telegram.
      * @return T subtype of Message
      */
     @Override
@@ -28,7 +28,7 @@ public final class MyTelegram<T extends Message> implements Telegram<T> {
     }
 
     /**
-     * Return the sender of the message
+     * Return the sender of the message.
      * @return ActorRef
      */
     @Override

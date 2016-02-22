@@ -61,6 +61,7 @@ public class TestActorRef<T extends Message> implements ActorRef<T> {
      * @return An actor
      */
     public Actor<T> getUnderlyingActor(ActorSystem system) {
+        // implementation done
         return ((Actor<T>)((AbsActorSystem) system).find(reference));
     }
 

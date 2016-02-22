@@ -10,6 +10,7 @@ public class MyActorRef<T extends Message> extends AbsActorRef<T> {
 
     public MyActorRef(ActorSystem system){ super((AbsActorSystem)system); }
 
+
     @Override
     public void send(T message, ActorRef to) {
         ((AbsActor<T>)system.find(to)).newTelegram(new MyTelegram<T>(message, this));

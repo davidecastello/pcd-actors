@@ -89,16 +89,17 @@ public abstract class AbsActorSystem implements ActorSystem {
 
     protected abstract ActorRef createActorReference(ActorMode mode);
 
+
     /**
-     *
-     * @param actor The actor to be stopped
      * Invoke this method on an actor to stop him.
+     * @param actor The actor to be stopped
      */
     @Override
     public void stop(ActorRef<?> actor) { ((AbsActor)actors.get(actor)).stop();}
 
+
     /**
-     * Invoke this method to stop all actors.
+     * Invoke this method to stop all actors that are active in the ActorSystem.
      * The stop() method above will be invoked on all the actors in the ActorSystem.
      */
     @Override
@@ -106,6 +107,8 @@ public abstract class AbsActorSystem implements ActorSystem {
         for (Map.Entry<ActorRef<?>, Actor<?>> entry : actors.entrySet())
             ((AbsActor) entry.getValue()).stop();
     }
+
+
 
     /**
      * Return the Actor associated to a given ActorRef, otherwise it throws a NoSuchActorException.
@@ -120,6 +123,7 @@ public abstract class AbsActorSystem implements ActorSystem {
         else
             throw new NoSuchActorException();
     }
+
 
     /**
      * This method will take a Runnable and it will execute it

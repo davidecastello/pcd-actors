@@ -17,7 +17,7 @@ import org.junit.Test;
  * The purpose of this class is to test the functionalities of the actors and the ActorSystem,
  * in order to check if they fulfill their purposes.
  *
- * Created by Davide on 22/02/16.
+ * Created by Davide Castello on 22/02/16.
  */
 
 public class MyTest {
@@ -80,7 +80,7 @@ public class MyTest {
      * Given two actors in the system, actor1 should be able
      * to send a telegram to actor2.
      * actor2 should now be able to process that message
-     * and send a telegram to actor1.
+     * and reply to actor1.
      */
     @Test
     public void shouldBeAbleToSendATelegramAndTheOtherOneShouldBeAbleToReply() throws InterruptedException {
@@ -100,8 +100,11 @@ public class MyTest {
         // Verify that the message has been received
         Assert.assertEquals("The message has to be received by the actor", "Hello, actor2!", actor2.getData());
 
+        // Verify that the message received was sent by actor1
+        Assert.assertEquals("The sender of the message has to be actor1", ref1, actor2.getSender());
+
         // actor2 can now reply to actor1
-        ref2.send(new StoreMessage("Hello, actor1!"), ref1);
+        ref2.send(new StoreMessage("Hello, actor1!"), actor2.getSender());
 
         // Wait that the message is processed
         Thread.sleep(2000);

@@ -53,19 +53,13 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public abstract class AbsActor<T extends Message> implements Actor<T> {
 
-    /**
-     * Self-reference of the actor
-     */
+    // Self-reference of the actor
     protected ActorRef<T> self;
 
-    /**
-     * Sender of the current message
-     */
+    //Sender of the current message
     protected ActorRef<T> sender;
 
-    /**
-     * True if stopped by the actor system
-     */
+    // True if stopped by the actor system
     private volatile boolean stopped;
 
     /**
@@ -76,9 +70,7 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
      */
     private BlockingQueue<Telegram<T>> telegrambox;
 
-    /**
-     * true if the manager has been created
-     */
+    // true if the manager has already been created
     private volatile boolean createdManager;
 
     /**
@@ -93,17 +85,27 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
     }
 
     /**
-     * Method used for testing purpose
+     * Method that checks if there are any telegrams left to read.
+     *
+     * Method used for testing purpose only.
      */
     public boolean nothingToRead() {return telegrambox.isEmpty();}
 
     /**
+     * Set data field "sender" to the last ActorRef that sent a message to this actor.
+     *
      * @param sender
-     * Set data field "sender" to the last ActorRef that sent a message to this actor
      */
     protected final void setSender(ActorRef<T> sender) {
         this.sender = sender;
     }
+
+    /**
+     * Method that returns the last ActorRef that sent a message to this actor.
+     * 
+     * Method used for testing purpose only.
+     */
+    public ActorRef<T> getSender() {return sender;}
 
     /**
      * Sets the self-reference.
@@ -117,7 +119,8 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
     }
 
     /**
-     * Sets the data field "stopped" to true if it isn't already.
+     * Sets the data field "stopped" to true: if it already is, it throws a NoSuchActorException.
+     * @throws NoSuchActorException
      */
     public void stop() {
         synchronized (this){
@@ -130,7 +133,7 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
 
 
     /**
-     * Adds a telegram in the TelegramBox
+     * Adds a telegram in the TelegramBox.
      * @param telegram type Telegram
      * @throws NoSuchActorException
      */
@@ -148,7 +151,7 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
     }
 
     /**
-     * Create the TelegramBox manager
+     * Create the TelegramBox manager.
      */
     private synchronized void createTheTelegramBoxManager() {
         ((AbsActorRef<T>)self).execute(new TelegramBoxManager());
@@ -161,8 +164,8 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
     private class TelegramBoxManager implements Runnable {
 
         /**
-         * If the actor isn't terminated, the TelegramBox manager works fine.
-         * If the actor is terminated, the TelegramBox manager must empty the TelegramBox before stopping.
+         * The TelegramBox manager works until the actor is stopped:
+         * then he must read all the telegrams remaining before finishing his job.
          */
         @Override
         public void run() {
@@ -174,6 +177,12 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
         }
 
 
+        /**
+         * The method that actually do the job:
+         * it takes a telegram to read, set the field "sender"
+         * to the actual sender of the telegram and then
+         * it processes the message with the receive method.
+         */
         private void telegramManagement(){
             try {
                 Telegram m = telegrambox.take();
