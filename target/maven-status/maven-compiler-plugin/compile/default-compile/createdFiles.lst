@@ -1,0 +1,16 @@
+it/unipd/math/pcd/actors/Actor.class
+it/unipd/math/pcd/actors/AbsActor$TelegramBoxManager.class
+it/unipd/math/pcd/actors/AbsActor.class
+it/unipd/math/pcd/actors/Message.class
+it/unipd/math/pcd/actors/ActorSystem$ActorMode.class
+it/unipd/math/pcd/actors/implementation/MyActorRef.class
+it/unipd/math/pcd/actors/exceptions/UnsupportedMessageException.class
+it/unipd/math/pcd/actors/AbsActor$1.class
+it/unipd/math/pcd/actors/ActorSystem.class
+it/unipd/math/pcd/actors/implementation/MyTelegram.class
+it/unipd/math/pcd/actors/exceptions/NoSuchActorException.class
+it/unipd/math/pcd/actors/implementation/AbsActorRef.class
+it/unipd/math/pcd/actors/ActorRef.class
+it/unipd/math/pcd/actors/implementation/MyActorSystem.class
+it/unipd/math/pcd/actors/AbsActorSystem.class
+it/unipd/math/pcd/actors/implementation/Telegram.class

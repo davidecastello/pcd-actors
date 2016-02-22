@@ -37,7 +37,12 @@
  */
 package it.unipd.math.pcd.actors;
 
-import it.unipd.math.pcd.actors.exceptions.UnsupportedMessageException;
+import it.unipd.math.pcd.actors.exceptions.NoSuchActorException;
+import it.unipd.math.pcd.actors.implementation.AbsActorRef;
+import it.unipd.math.pcd.actors.implementation.Telegram;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Defines common properties of all actors.
@@ -64,12 +69,27 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
     private volatile boolean stopped;
 
     /**
+     * Queue where all the received telegrams go.
+     * In this project specifics, this data structure is called "mail box":
+     * I decided to call it "telegram box" since I called "telegrams" the ones
+     * who have the message, in order to be original.
+     */
+    private BlockingQueue<Telegram<T>> telegrambox;
+
+    /**
+     * true if the manager has been created
+     */
+    private volatile boolean createdManager;
+
+    /**
      * The constructor of the AbsActor class
      */
-    AbsActor() {
+    public AbsActor() {
         self = null;
         sender = null;
         stopped = false;
+        telegrambox = new LinkedBlockingQueue<>();
+        createdManager = false;
     }
 
     /**
@@ -91,5 +111,72 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
         return this;
     }
 
-    public void stop() { stopped = true; }
+    /**
+     * Sets the data field "stopped" to true if it isn't already.
+     */
+    public void stop() {
+        synchronized (this){
+            if (!stopped)
+                stopped = true;
+            else
+                throw new NoSuchActorException();
+        }
+    }
+
+
+    /**
+     * Adds a telegram in the TelegramBox
+     * @param telegram type Telegram
+     * @throws NoSuchActorException
+     */
+    public void newTelegram(Telegram<T> telegram){
+        try {
+            if (stopped)
+                throw new NoSuchActorException();
+            telegrambox.put(telegram);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (!createdManager) {
+            createTheTelegramBoxManager();
+        }
+    }
+
+    /**
+     * Create the TelegramBox manager
+     */
+    private synchronized void createTheTelegramBoxManager() {
+        ((AbsActorRef<T>)self).execute(new TelegramBoxManager());
+        createdManager = true;
+    }
+
+    /**
+     * Class that manages the telegrams in the TelegramBox.
+     */
+    private class TelegramBoxManager implements Runnable {
+
+        /**
+         * If the actor isn't terminated, the telegrambox manager works fine.
+         * If the actor is terminated, the telegrambox manager must empty the telegrambox before stopping.
+         */
+        @Override
+        public void run() {
+            while(!stopped)
+                telegramManagement();
+            if (stopped)
+                while(!(telegrambox.isEmpty()))
+                    telegramManagement();
+        }
+
+
+        private void telegramManagement(){
+            try {
+                Telegram m = telegrambox.take();
+                setSender(m.getSender());
+                receive((T) m.getMessage());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

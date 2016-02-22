@@ -15,7 +15,7 @@
  * <p/>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -95,10 +95,7 @@ public abstract class AbsActorSystem implements ActorSystem {
      * Invoke this method on an actor to stop him.
      */
     @Override
-    public void stop(ActorRef<?> actor) {
-        ((AbsActor)actors.get(actor)).stop();
-        actors.remove(actor);
-    }
+    public void stop(ActorRef<?> actor) { ((AbsActor)actors.get(actor)).stop();}
 
     /**
      * Invoke this method to stop all actors.
@@ -112,15 +109,22 @@ public abstract class AbsActorSystem implements ActorSystem {
     }
 
     /**
-     * Return the actor associated to a given ActorRef
-     * @param actorref type ActorRef
-     * @return Actor type Actor
+     * Return the Actor associated to a given ActorRef, otherwise it throws a NoSuchActorException.
+     * @param ref type ActorRef
+     * @return act type Actor
      * @throws NoSuchActorException
      */
-    public Actor<?> matchTo(ActorRef<?> actorref) throws NoSuchActorException {
-        Actor actor = actors.get(actorref);
-        if (actor == null)
+    public Actor<?> find(ActorRef<?> ref) throws NoSuchActorException {
+        Actor act = actors.get(ref);
+        if(act != null)
+            return act;
+        else
             throw new NoSuchActorException();
-        return actor;
     }
+
+    /**
+     * This method will take a Runnable and it will execute it
+     * @param r type Runnable
+     */
+    public abstract void systemExecute(Runnable r);
 }
