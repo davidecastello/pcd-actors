@@ -102,7 +102,7 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
 
     /**
      * Method that returns the last ActorRef that sent a message to this actor.
-     * 
+     *
      * Method used for testing purpose only.
      */
     public ActorRef<T> getSender() {return sender;}
