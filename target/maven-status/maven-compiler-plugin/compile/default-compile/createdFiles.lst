@@ -9,6 +9,7 @@ it/unipd/math/pcd/actors/AbsActor$1.class
 it/unipd/math/pcd/actors/ActorSystem.class
 it/unipd/math/pcd/actors/implementation/MyTelegram.class
 it/unipd/math/pcd/actors/exceptions/NoSuchActorException.class
+it/unipd/math/pcd/actors/implementation/MyActorSystem$Stoppable.class
 it/unipd/math/pcd/actors/implementation/AbsActorRef.class
 it/unipd/math/pcd/actors/ActorRef.class
 it/unipd/math/pcd/actors/implementation/MyActorSystem.class

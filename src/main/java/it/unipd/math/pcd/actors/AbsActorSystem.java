@@ -39,8 +39,9 @@ package it.unipd.math.pcd.actors;
 
 import it.unipd.math.pcd.actors.exceptions.NoSuchActorException;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A map-based implementation of the actor system.
@@ -57,10 +58,10 @@ public abstract class AbsActorSystem implements ActorSystem {
     private Map<ActorRef<?>, Actor<?>> actors;
 
     /**
-     * The constructor creates its data field 'actor' as an HashMap where ActorRef are the keys.
+     * The constructor creates its data field 'actors' as a ConcurrentHashMap where ActorRef are the keys.
      */
     public AbsActorSystem() {
-        actors = new HashMap<>();
+        actors = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -91,26 +92,6 @@ public abstract class AbsActorSystem implements ActorSystem {
 
 
     /**
-     * Invoke this method on an actor to stop him.
-     * @param actor The actor to be stopped
-     */
-    @Override
-    public void stop(ActorRef<?> actor) { ((AbsActor)actors.get(actor)).stop();}
-
-
-    /**
-     * Invoke this method to stop all actors that are active in the ActorSystem.
-     * The stop() method above will be invoked on all the actors in the ActorSystem.
-     */
-    @Override
-    public void stop() {
-        for (Map.Entry<ActorRef<?>, Actor<?>> entry : actors.entrySet())
-            ((AbsActor) entry.getValue()).stop();
-    }
-
-
-
-    /**
      * Return the Actor associated to a given ActorRef, otherwise it throws a NoSuchActorException.
      * @param ref type ActorRef
      * @return act type Actor
@@ -130,4 +111,22 @@ public abstract class AbsActorSystem implements ActorSystem {
      * @param r type Runnable
      */
     public abstract void systemExecute(Runnable r);
+
+
+    /**
+     * Return all the references stored by ActorSystem.
+     *
+     */
+    protected final Set<ActorRef<?>> getMapKeys() {
+        return actors.keySet();
+    }
+
+
+    /**
+     * Remove an actor from the map
+     * @param actor type ActorRef
+     */
+    protected void remove(ActorRef actor){
+        actors.remove(actor);
+    }
 }

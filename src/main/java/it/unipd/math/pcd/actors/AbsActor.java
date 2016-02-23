@@ -121,14 +121,16 @@ public abstract class AbsActor<T extends Message> implements Actor<T> {
     /**
      * Sets the data field "stopped" to true: if it already is, it throws a NoSuchActorException.
      * @throws NoSuchActorException
+     * @return true if the actor is stopped, otherwise false
      */
-    public void stop() {
+    public boolean stop() {
         synchronized (this){
             if (!stopped)
                 stopped = true;
             else
                 throw new NoSuchActorException();
         }
+        return stopped;
     }
 
 

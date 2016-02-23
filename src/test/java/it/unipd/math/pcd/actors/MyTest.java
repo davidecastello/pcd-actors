@@ -140,7 +140,7 @@ public class MyTest {
         Assert.assertEquals("There are some telegrams for you.", false, actor.nothingToRead());
 
         // Stop the actor
-        actor.stop();
+        system.stop(ref);
 
         // Wait for the actor to read all of its telegrams
         Thread.sleep(2000);
